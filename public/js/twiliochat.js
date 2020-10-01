@@ -60,7 +60,7 @@ var twiliochat = (function() {
     var notifyTyping = $.throttle(function() {
       tc.currentChannel.typing();
     }, 1000);
-  
+  // create channel
     tc.handleNewChannelInputKeypress = function(event) {
       if (event.keyCode === 13) {
         tc.messagingClient
@@ -94,9 +94,10 @@ var twiliochat = (function() {
           console.log('Failed to fetch the Access Token with error: ' + error);
         });
     }
-  
+        //listen to client events
+    
     function connectMessagingClient(token) {
-      // Initialize the Chat messaging client
+        // Initialize the Chat messaging client
       Twilio.Chat.Client.create(token).then(function(client) {
         tc.messagingClient = client;
         updateConnectedUI();
@@ -139,6 +140,7 @@ var twiliochat = (function() {
         }
       });
     };
+    // join general chat
   
     tc.joinGeneralChannel = function() {
       console.log('Attempting to join "general" chat channel...');
@@ -171,7 +173,7 @@ var twiliochat = (function() {
           updateChannelUI(_channel);
           
           return joinedChannel;
-        })
+        }) 
         .catch(function(err) {
           if (_channel.status == 'joined') {
             updateChannelUI(_channel);
@@ -182,7 +184,7 @@ var twiliochat = (function() {
           );
         });
     }
-  
+  //Listen to channel events
     function initChannelEvents() {
       console.log(tc.currentChannel.friendlyName + ' ready.');
       tc.currentChannel.on('messageAdded', tc.addMessageToList);
@@ -322,6 +324,8 @@ var twiliochat = (function() {
   
       $channelList.append(rowDiv);
     }
+
+    // delete a channel
   
     function deleteCurrentChannel() {
       if (!tc.currentChannel) {
@@ -332,6 +336,7 @@ var twiliochat = (function() {
         alert('You cannot delete the general channel');
         return;
       }
+      // join other channels
   
       tc.currentChannel
         .delete()
