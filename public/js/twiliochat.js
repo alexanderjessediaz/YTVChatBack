@@ -19,3 +19,20 @@ function fetchAccessToken(username, handler) {
       tc.messagingClient.on('tokenExpired', refreshToken);
     });
   }
+
+
+  tc.loadChannelList = function(handler) {
+  if (tc.messagingClient === undefined) {
+    console.log('Client is not initialized');
+    return;
+  }
+
+  tc.messagingClient.getPublicChannelDescriptors().then(function(channels) {
+    tc.channelArray = tc.sortChannelsByName(channels.items);
+    $channelList.text('');
+    tc.channelArray.forEach(addChannel);
+    if (typeof handler === 'function') {
+      handler();
+    }
+  });
+};
